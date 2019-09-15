@@ -1,0 +1,72 @@
+Metadata-Version: 2.1
+Name: gingerit
+Version: 0.8.0
+Summary: Correcting spelling and grammar mistakes based on the context of complete entences. Wrapper around the gingersoftware.com API
+Home-page: https://github.com/Azd325/gingerit
+License: MIT
+Author: Tim Kleinschmdit
+Author-email: tim.kleinschmidt@gmail.com
+Requires-Python: >=3.6,<4.0
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Requires-Dist: requests (>=2.22,<3.0)
+Description-Content-Type: text/x-rst
+
+===============================
+Gingerit
+===============================
+
+.. image:: https://badges.gitter.im/Join%20Chat.svg
+   :alt: Join the chat at https://gitter.im/Azd325/gingerit
+   :target: https://gitter.im/Azd325/gingerit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
+.. image:: https://img.shields.io/travis/Azd325/gingerit.svg
+        :target: https://travis-ci.org/Azd325/gingerit
+
+.. image:: https://img.shields.io/pypi/v/gingerit.svg
+        :target: https://pypi.python.org/pypi/gingerit
+
+
+Correcting spelling and grammar mistakes based on the context of complete sentences. Wrapper around the gingersoftware.com API
+
+* Free software: MIT license
+* Documentation: https://gingerit.readthedocs.org.
+
+Installation:
+-------------
+
+::
+
+    pip install gingerit
+
+Usage:
+------
+
+::
+
+    from gingerit.gingerit import GingerIt
+
+    text = 'The smelt of fliwers bring back memories.'
+
+    parser = GingerIt()
+    parser.parse(text)
+
+TODO:
+-----
+
+ - Commandline Tool
+
+
+Thanks
+------
+
+Thank you for [Ginger Proofreader](http://www.gingersoftware.com/) for such awesome service. Hope they will keep it free :)
+
+Thanks to @subosito for this inspriration https://github.com/subosito/gingerice (Ruby Gem)
+

@@ -2,6 +2,8 @@ import os, requests, time
 from xml.etree import ElementTree
 import vlc
 
+from gingerit.gingerit import GingerIt
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -81,15 +83,17 @@ if __name__ == "__main__":
     while True:
         mtime_cur = os.path.getmtime("texts.txt")
         if mtime_cur != mtime_last:
-            time.sleep(1)
+            time.sleep(2)
             print(f'LOG {time.strftime("%Y%m%d-%H%M")}: file watch event triggerred')
             with open('texts.txt', 'r') as file:
                 data = file.read().split('\n')
                 if data != pdata:
                     pdata = data
                     try:
-                        app.tts = data[-1]
-                        if len(data[-1]) > 0:
+                        parser = GingerIt()
+                        correctedText = parser.parse(data[-1])['result']
+                        app.tts = correctedText
+                        if len(correctedText) > 0:
                             app.save_audio()
                     except:
                         print(f"LOG {time.strftime('%Y%m%d-%H%M')}: No data in file")
