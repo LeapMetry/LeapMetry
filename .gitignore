@@ -1,0 +1,8 @@
+# Audio Output files from the Azure TTS
+#######################################
+*.mp3
+*.wav
+
+# Environment variables
+#######################################
+.env
