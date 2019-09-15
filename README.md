@@ -2,7 +2,7 @@
 
 ## Built by
 
-ECE's best: Aditya Arora [@arora-aditya] + Rosemary Wang [@RosemaryW] + Yousuf Hali [@yousufhali]
+ECE's best: Aditya Arora [@arora-aditya] + Rosemary Wang [@RosemaryW] + Yousuf Hamdy Ali [@yousufhali]
 
 ## Inspiration
 
