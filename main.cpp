@@ -19,8 +19,7 @@ void writeToFile(string sentence){
     fileOutput<<endl;
     fileOutput<<sentence;
     fileOutput.close();
-    sentence = "\0" ;
-    usleep(5000000);
+    sentence.erase();
     cout<<"We the north"<<endl;
     return;
 }
@@ -103,7 +102,7 @@ string alphabet(Frame frameUT){
             return (string)"North";
         }
         else if (retAlphaCount == 0b11111){
-            return (string)"Love you";
+            return (string)"Azure's the best";
         }
 
         string temp = "";
@@ -112,50 +111,59 @@ string alphabet(Frame frameUT){
 }
 
 int main(int argc, char** argv){
-  cout<<"Beginning: "<<endl;
 	modeWord = true;
-	Controller controller;
-	Frame frame = controller.frame();
-  int counter = 0;
-  string prevLetter = "?";
-  int skipCounter = 0;
-  int totalSkipCounter = 0;
 
+  Controller controller;
+	Frame frame = controller.frame();
+
+  long recentFID = 0;
+  int counter = 0;
+  int totalSkipCounter = 0;
+  string parsed = "?"; //Choosing a non-supported string to start
 
 	for(;;){
-    totalSkipCounter++;
+    //Validity check
+    if (frame.isValid()==false){
+      frame = controller.frame();
+      continue;
+    }
+    //Avoid processing same frame twice (may occur due to slower env data input than CPU)
+    if (frame.id() == recentFID){
+      frame = controller.frame();
+      continue;
+    }
+    else{
+      recentFID = frame.id();
+      frame = controller.frame();
+    }
 
+    //Process 1 in 3 frames due to high frame rate
+    totalSkipCounter++;
     if (totalSkipCounter%3 != 0){
       continue;
     }
 
-
-    if (skipCounter >0){
-      skipCounter--;
-      continue;
+    //string alphabet (Frame) is main string/char recognition form
+    string toBeParsed = alphabet(frame);
+    if (toBeParsed.compare(parsed)==0) {
+        counter++;
     }
 
-    frame = controller.frame();
+    if (counter >= frame.currentFramesPerSecond() || toBeParsed.compare(parsed)!=0) {
+        sentence += toBeParsed;
+        parsed = toBeParsed;
+        cout<<toBeParsed<<endl;
 
-    if (frame.isValid()==false){
-      continue;
+        if (toBeParsed[0] == ' '){
+            writeToFile(sentence);
+            sentence.clear();
+            sentence = "";
+            frame = controller.frame();
+            recentFID = frame.id(); //This will cause the next frame to be skipped
+        }
+
+        counter = 0;
     }
-
-    string letter = alphabet(frame);
-        if (letter.compare(prevLetter)==0) {
-            counter++;
-        }
-        if (counter >= 240000 || letter.compare(prevLetter)!=0) {
-            sentence += alphabet(frame);
-            cout<<prevLetter<<endl;
-            if (prevLetter[0] == ' '){
-                writeToFile(sentence);
-                controller.frame();
-                skipCounter=10000;
-            }
-            counter = 0;
-            prevLetter = letter;
-        }
 	}
 
 
