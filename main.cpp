@@ -93,13 +93,13 @@ string alphabet(Frame frameUT){
 			retAlphaCount |= 0b10000;
 		}
         if (retAlphaCount == 0b11011){
-            return (string)"Hack";
+            return (string)"Hack the North";
         }
         else if (retAlphaCount == 0b11100){
-            return (string)"The";
+            return (string)"Waterloo";
         }
         else if (retAlphaCount == 0b11101){
-            return (string)"North";
+            return (string)"Canada";
         }
         else if (retAlphaCount == 0b11111){
             return (string)"Azure's the best";
@@ -118,9 +118,8 @@ int main(int argc, char** argv){
 
   long recentFID = 0;
   int counter = 0;
-  int totalSkipCounter = 0;
   string parsed = "?"; //Choosing a non-supported string to start
-
+  int interCount = 0;
 	for(;;){
     //Validity check
     if (frame.isValid()==false){
@@ -137,31 +136,36 @@ int main(int argc, char** argv){
       frame = controller.frame();
     }
 
-    //Process 1 in 3 frames due to high frame rate
-    totalSkipCounter++;
-    if (totalSkipCounter%3 != 0){
-      continue;
-    }
-
     //string alphabet (Frame) is main string/char recognition form
     string toBeParsed = alphabet(frame);
     if (toBeParsed.compare(parsed)==0) {
         counter++;
     }
-
+    usleep(frame.currentFramesPerSecond()*1000);
     if (counter >= frame.currentFramesPerSecond() || toBeParsed.compare(parsed)!=0) {
-        sentence += toBeParsed;
+        if (toBeParsed.compare(" ") != 0){
+          sentence += toBeParsed;
+          cout<<toBeParsed<<endl;
+        }
         parsed = toBeParsed;
-        cout<<toBeParsed<<endl;
 
         if (toBeParsed[0] == ' '){
-            writeToFile(sentence);
+            if (interCount!=2){
+              interCount++;
+              continue;
+            }
+            interCount = 0;
+            if (sentence.compare("") != 0){
+              writeToFile(sentence);
+            }
             sentence.clear();
             sentence = "";
             frame = controller.frame();
-            recentFID = frame.id(); //This will cause the next frame to be skipped
         }
-
+        else{
+          interCount = 0;
+        }
+        recentFID = frame.id(); //This will cause the next frame to be skipped
         counter = 0;
     }
 	}
